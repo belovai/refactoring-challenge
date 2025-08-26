@@ -1,10 +1,11 @@
 <?php
+
 if ($argc != 4) {
     echo 'Ambiguous number of parameters!';
     exit(1);
 }
-$dokumentumok = array();
-$d = array();
+$dokumentumok = [];
+$d = [];
 $row = 1;
 if (($handle = fopen('document_list.csv', 'r')) !== false) {
     while (($data = fgetcsv($handle, null, ';')) !== false) {
@@ -26,17 +27,19 @@ if (($handle = fopen('document_list.csv', 'r')) !== false) {
     }
     fclose($handle);
 }
-function is_empty($obj) {
+function is_empty($obj)
+{
     return empty((array) $obj);
 }
 $dokumentumok = array_filter($dokumentumok, function ($item) {
     global $argv;
-    $p = (array)$item['partner'];
-    $partner = (!empty($p['id']) && $p['id'] == $argv[2]);
+    $p = (array) $item['partner'];
+    $partner = (! empty($p['id']) && $p['id'] == $argv[2]);
     $type = $item['document_type'] == $argv[1];
-    return $partner && $type ;
+
+    return $partner && $type;
 });
-$d2 = array('document_id', 'document_type','partner name', 'total');
+$d2 = ['document_id', 'document_type', 'partner name', 'total'];
 foreach ($d2 as $h) {
     echo str_pad($h, 20);
 }
@@ -51,7 +54,7 @@ foreach ($dokumentumok as $item) {
     do {
         $total += $item['items'][$itemCounter]->unit_price * $item['items'][$itemCounter]->quantity;
         $itemCounter++;
-    } while($itemCounter < count($item['items']));
+    } while ($itemCounter < count($item['items']));
     if ($total > $argv[3]) {
         echo str_pad($item['id'], 20);
         echo str_pad($item['document_type'], 20);
@@ -60,4 +63,3 @@ foreach ($dokumentumok as $item) {
         echo "\n";
     }
 }
-?>
