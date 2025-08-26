@@ -1,0 +1,11 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: ./docker/app
+      args:
+        UID: ${APP_UID:-33}
+        GID: ${APP_GID:-33}
+    volumes:
+      - .:/var/www
+
