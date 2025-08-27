@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Dto\Document;
 use App\Dto\ProcessDocumentRequest;
+use App\Dto\ProcessDocumentResult;
 use App\Filters\DocumentFilterBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class ProcessDocument
 {
+    /**
+     * @var array<string>
+     */
+    protected array $header = [];
+
     /**
      * @param  array<string, string>  $config
      */
@@ -19,24 +26,35 @@ class ProcessDocument
         //
     }
 
-    public function process(ProcessDocumentRequest $request): Collection
+    public function process(ProcessDocumentRequest $request): ProcessDocumentResult
     {
-        return DocumentFilterBuilder::for($this->readFile($request->file))
+        $documents = DocumentFilterBuilder::for($this->readFile($request->file))
             ->type($request->documentType)
             ->partner($request->partnerId)
-            ->amount($request->amount)
+            ->total($request->total)
             ->get();
+
+        return new ProcessDocumentResult([
+            'document_id',
+            'document_type',
+            'partner name',
+            'total',
+        ], $documents);
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<int, \App\Dto\Document>
+     *
+     * @throws \JsonException
+     */
     private function readFile(string $file): Collection
     {
         $handle = fopen($file, 'r');
-        $header = [];
         $documents = new Collection;
 
         while (($row = fgetcsv($handle, null, $this->config['delimiter'])) !== false) {
-            if (! $header) {
-                $header = $row;
+            if (! $this->header) {
+                $this->header = $row;
 
                 continue;
             }
@@ -49,14 +67,17 @@ class ProcessDocument
                 return $cell;
             }, $row);
 
-            $assoc = array_combine($header, $data);
-            $assoc['amount'] = $this->calculateAmount($assoc['items'] ?? []);
-            $documents->add($assoc);
+            $assoc = array_combine($this->header, $data);
+            $assoc['total'] = $this->calculateAmount($assoc['items'] ?? []);
+            $documents->add(Document::from($assoc));
         }
 
         return $documents;
     }
 
+    /**
+     * @param  array<mixed>  $items
+     */
     private function calculateAmount(array $items): float
     {
         $sum = 0.0;

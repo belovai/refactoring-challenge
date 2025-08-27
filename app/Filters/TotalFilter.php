@@ -6,14 +6,14 @@ namespace App\Filters;
 
 use Illuminate\Support\Collection;
 
-class PartnerFilter
+class TotalFilter
 {
     /**
      * @param  \Illuminate\Support\Collection<int, \App\Dto\Document>  $collection
      * @return \Illuminate\Support\Collection<int, \App\Dto\Document>
      */
-    public static function apply(Collection $collection, int $partnerId): Collection
+    public static function apply(Collection $collection, float $total): Collection
     {
-        return $collection->where('partner.id', $partnerId);
+        return $collection->where('total', '>', $total);
     }
 }

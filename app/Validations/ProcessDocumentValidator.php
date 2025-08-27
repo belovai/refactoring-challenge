@@ -13,18 +13,24 @@ use Illuminate\Validation\ValidationException;
 
 class ProcessDocumentValidator
 {
+    /**
+     * @param  array<string, mixed>  $input
+     */
     public function __construct(private array $input)
     {
         //
     }
 
+    /**
+     * @return array<string, array<int, mixed>>
+     */
     protected function rules(): array
     {
         return [
             'file' => ['required', new ReadableFile],
             'documentType' => ['required', Rule::enum(DocumentType::class)],
             'partnerId' => ['required', 'integer', 'min:1'],
-            'amount' => ['required', 'numeric', 'min:0'],
+            'total' => ['required', 'numeric', 'min:0'],
         ];
     }
 

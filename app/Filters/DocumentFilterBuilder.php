@@ -9,11 +9,17 @@ use Illuminate\Support\Collection;
 
 class DocumentFilterBuilder
 {
+    /**
+     * @param  \Illuminate\Support\Collection<int, \App\Dto\Document>  $documents
+     */
     public function __construct(private Collection $documents)
     {
         //
     }
 
+    /**
+     * @param  \Illuminate\Support\Collection<int, \App\Dto\Document>  $documents
+     */
     public static function for(Collection $documents): self
     {
         return new self($documents);
@@ -33,13 +39,16 @@ class DocumentFilterBuilder
         return $this;
     }
 
-    public function amount(float $amount): self
+    public function total(float $total): self
     {
-        $this->documents = AmountFilter::apply($this->documents, $amount);
+        $this->documents = TotalFilter::apply($this->documents, $total);
 
         return $this;
     }
 
+    /**
+     * @return \Illuminate\Support\Collection<int, \App\Dto\Document>
+     */
     public function get(): Collection
     {
         return $this->documents;
