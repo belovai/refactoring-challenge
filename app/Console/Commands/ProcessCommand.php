@@ -35,7 +35,7 @@ class ProcessCommand extends Command
         $validator = $validationFactory->fromArray(array_merge($this->arguments(), $this->options()));
         $processDocumentRequest = $validator->validate();
 
-        $processDocument->process($processDocumentRequest);
+        $documents = $processDocument->process($processDocumentRequest);
 
         return static::SUCCESS;
     }
