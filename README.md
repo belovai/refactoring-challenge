@@ -1,5 +1,7 @@
 # Refactoring Challenge
 
+[![Tests](https://github.com/belovai/refactoring-challenge/actions/workflows/tests.yaml/badge.svg)](https://github.com/belovai/refactoring-challenge/actions/workflows/tests.yaml)
+
 > This is a demo project, not for production use.
 
 ## Installation
