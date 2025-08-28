@@ -55,3 +55,9 @@ docker-compose exec app bash -c "./vendor/bin/pint"
 ```bash
 docker-compose exec app bash -c "./vendor/bin/phpstan analyse"
 ```
+
+### Test
+
+```bash
+docker-compose exec app php artisan test
+```
