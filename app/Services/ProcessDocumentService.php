@@ -11,7 +11,7 @@ use App\Filters\DocumentFilterBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class ProcessDocument
+class ProcessDocumentService
 {
     /**
      * @var array<string>

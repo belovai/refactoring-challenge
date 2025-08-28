@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Services\ProcessDocument;
+use App\Services\ProcessDocumentService;
 use Illuminate\Support\ServiceProvider;
 
 class ProcessDocumentProvider extends ServiceProvider
@@ -15,8 +15,8 @@ class ProcessDocumentProvider extends ServiceProvider
     #[\Override]
     public function register(): void
     {
-        $this->app->singleton(ProcessDocument::class, function ($app) {
-            return new ProcessDocument(config('document'));
+        $this->app->singleton(ProcessDocumentService::class, function ($app) {
+            return new ProcessDocumentService(config('document'));
         });
     }
 
